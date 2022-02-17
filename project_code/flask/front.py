@@ -29,7 +29,7 @@ def index():
         if not content:
             flash('Text input is required!')
         else:
-            summary = stop_word(content)
+            summary = stop_word.stop_word_vomit(content)
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)', 
                          (title, content, summary))

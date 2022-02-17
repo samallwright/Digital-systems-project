@@ -16,6 +16,6 @@ def stop_word_vomit(input_text):
 		if w not in stop_words:
 			filtered_sentence.append(w)
 
-	return filtered_sentence
+	return str(filtered_sentence)
 
 # print(stop_word_vomit(input_text))
