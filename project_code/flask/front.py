@@ -1,6 +1,7 @@
 import sqlite3
 from turtle import pos
 import stop_word
+import nltk_summary
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 app = Flask(__name__)
@@ -30,6 +31,7 @@ def index():
             flash('Text input is required!')
         else:
             summary = stop_word.stop_word_vomit(content)
+            summary = nltk_summary._run_article_summary(content)
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)', 
                          (title, content, summary))

@@ -4,7 +4,6 @@ from nltk.tokenize import word_tokenize
 
 stop_words = set(stopwords.words('english'))
 
-# input_text = 'input this hello for the a a a text'
 def stop_word_vomit(input_text):
 	word_tokens = word_tokenize(input_text)
 
@@ -16,6 +15,4 @@ def stop_word_vomit(input_text):
 		if w not in stop_words:
 			filtered_sentence.append(w)
 
-	return str(filtered_sentence)
-
-# print(stop_word_vomit(input_text))
+	return ' '.join(filtered_sentence)
