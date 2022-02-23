@@ -1,25 +1,7 @@
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, sent_tokenize
-import bs4 as BeautifulSoup
 import urllib.request
-
-# # fetching the content from the URL
-# fetched_data = urllib.request.urlopen("https://en.wikipedia.org/wiki/20th_century")
-
-# article_read = fetched_data.read()
-
-# # parsing the URL content and storing in a variable
-# article_parsed = BeautifulSoup.BeautifulSoup(article_read, "html.parser")
-
-# # returning <p> tags
-# paragraphs = article_parsed.find_all("p")
-
-# article_content = ""
-
-# looping through the paragraphs and adding them to the variable
-# for p in paragraphs:
-#     article_content += p.text
 
 
 def _create_dictionary_table(text_string) -> dict:
@@ -88,20 +70,10 @@ def _get_article_summary(sentences, sentence_weight, threshold):
 
 
 def _run_article_summary(article):
-
-    # creating a dictionary for the word frequency table
     frequency_table = _create_dictionary_table(article)
-
-    # tokenizing the sentences
     sentences = sent_tokenize(article)
-
-    # algorithm for scoring a sentence by its words
     sentence_scores = _calculate_sentence_scores(sentences, frequency_table)
-
-    # getting the threshold
     threshold = _calculate_average_score(sentence_scores)
-
-    # producing the summary
     article_summary = _get_article_summary(sentences, sentence_scores, 1.5 * threshold)
 
     return article_summary

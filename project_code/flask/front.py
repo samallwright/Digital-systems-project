@@ -1,10 +1,15 @@
+from distutils.log import debug
 import sqlite3
 from turtle import pos
 import stop_word
 import nltk_summary
 from flask import Flask, render_template, request, url_for, flash, redirect
+from flask_debug import Debug
 from werkzeug.exceptions import abort
 app = Flask(__name__)
+Debug(app)
+if __name__ == "__main__":
+    app.run(debug=True)
 TEMPLATES_AUTO_RELOAD = True
 app.config['SECRET_KEY'] = 'your secret key'
 
@@ -30,7 +35,7 @@ def index():
         if not content:
             flash('Text input is required!')
         else:
-            summary = stop_word.stop_word_vomit(content)
+            # summary = stop_word.stop_word_vomit(content)
             summary = nltk_summary._run_article_summary(content)
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)', 
