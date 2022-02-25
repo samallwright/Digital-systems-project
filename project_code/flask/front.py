@@ -3,16 +3,19 @@ import sqlite3
 from turtle import pos
 import stop_word
 import nltk_summary
+import top_ten
 from flask import Flask, render_template, request, url_for, flash, redirect
 from flask_debug import Debug
 from werkzeug.exceptions import abort
 app = Flask(__name__)
-Debug(app)
-if __name__ == "__main__":
-    app.run(debug=True)
+# Debug(app)
+# if __name__ == "__main__":
+#     app.run(debug=True)
 TEMPLATES_AUTO_RELOAD = True
 app.config['SECRET_KEY'] = 'your secret key'
 
+
+###.!!! REMEMBER TO CD INTO CORRECT FOLDER BEFORE FLASK RUN !!!###
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -36,7 +39,7 @@ def index():
             flash('Text input is required!')
         else:
             # summary = stop_word.stop_word_vomit(content)
-            summary = nltk_summary._run_article_summary(content)
+            summary = top_ten.top_ten(content)
             conn = get_db_connection()
             conn.execute('INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)', 
                          (title, content, summary))
