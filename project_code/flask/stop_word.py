@@ -1,18 +1,21 @@
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from open_test_text import get_text
 
-stop_words = set(stopwords.words('english'))
+stop_words = set(stopwords.words("english"))
+
 
 def stop_word_vomit(input_text):
-	word_tokens = word_tokenize(input_text)
+    word_tokens = word_tokenize(input_text)
+    filtered_sentence = [
+        word
+        for word in word_tokens
+        if not word.lower() in stop_words and word.isalnum()
+    ]
 
-	filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]
+    return " ".join(filtered_sentence)
 
-	filtered_sentence = []
 
-	for w in word_tokens:
-		if w not in stop_words:
-			filtered_sentence.append(w)
-
-	return ' '.join(filtered_sentence)
+# print(stop_word_vomit(get_text()))
+# use marking criteria
