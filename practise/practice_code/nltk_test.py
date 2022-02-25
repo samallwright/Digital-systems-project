@@ -2,11 +2,6 @@ import nltk
 from nltk.tokenize import sent_tokenize
 from nltk.corpus import treebank
 
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('maxent_ne_chunker')
-nltk.download('words')
-nltk.download('treebank')
 
 sentence = """At eight o'clock on Thursday morning
 ... Arthur didn't feel very good."""
@@ -37,3 +32,4 @@ sentence_string = """ Muad'Dib learned rapidly because his first training was in
 ... and how many more believe learning to be difficult. """
 
 sent_tokenize(sentence_string)
+print(sentence_string)
