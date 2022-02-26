@@ -1,9 +1,9 @@
 import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 from open_test_text import get_text
-from stop_word import stop_word_vomit
+from stop_word import stop_word_removal
 
-input_text = stop_word_vomit(get_text())
+input_text = stop_word_removal(get_text())
 word_tokens = word_tokenize(input_text)
 
 tagged = nltk.pos_tag(word_tokens)
