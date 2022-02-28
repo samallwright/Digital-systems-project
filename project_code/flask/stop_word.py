@@ -1,7 +1,7 @@
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from open_test_text import get_text
+from text_functions import get_text
 
 stop_words = set(stopwords.words("english"))
 

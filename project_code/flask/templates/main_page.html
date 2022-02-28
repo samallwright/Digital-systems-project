@@ -1,37 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} TextSum {% endblock %}</h1>
+<h1>{% block title %} TextSum {% endblock %}</h1>
 
-    <form method = "post">
-        <div class="form-group">
-            <label for="title">Submit title</label>
-            <input type = "text" name = "title" 
-                class="form-control"
-                placeholder="Enter title">{{ request.form['title'] }}</input>
+<form method="post">
+    <div class="form-group">
+        <label for="title">Submit title</label>
+        <input type="text" name="title" class="form-control" placeholder="Enter title">{{ request.form['title']
+        }}</input>
 
         <div class="form-group">
             <label for="content">Submit text</label>
-            <textarea name = "content" 
-                class="form-control"
+            <textarea name="content" class="form-control"
                 placeholder="Enter text">{{ request.form['content'] }}</textarea>
-        
-        <div id="textHelp" class="form-text">Decide level of summary</div>
-            <label for="customRange3" class="form-label">Level of summary</label>
-            <input type="range" class="form-range" min="0" max="3" step="1" id="customRange3">
+
+            <div id="textHelp" class="form-text">Decide level of summary</div>
+            <label for="preq_range" class="form-label">Level of summary</label>
+            <input type="range" class="form-range" min="0" max="3" step="1" name="preq_range">
 
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-primary">Reset</button>
-        </div>  
-    </form>
+        </div>
+</form>
 
-    {% for post in posts %}
-        <a href="{{url_for('post', post_id=post['id']) }}">
-            <h2>{{ post['title'] }}</h2>
-        </a>
-        <span class="badge badge-primary">{{ post['created'] }}</span>
-        <hr>
-    {% endfor %}
+{% for post in posts %}
+<a href="{{url_for('post', post_id=post['id']) }}">
+    <h2>{{ post['title'] }}</h2>
+</a>
+<span class="badge badge-primary">{{ post['created'] }}</span>
+<hr>
+{% endfor %}
 {% endblock %}

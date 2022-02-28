@@ -3,7 +3,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk import FreqDist, ngrams
-from open_test_text import get_text
+from text_functions import get_text
 from stop_word import stop_word_removal
 
 

@@ -1,7 +1,9 @@
 from distutils.log import debug
 import sqlite3
 from turtle import pos
-import token_freq
+from token_freq import basic_table
+from word_weight import select_criteria_sentences, sentences, weighting
+from text_functions import format_for_frontend
 from flask import Flask, render_template, request, url_for, flash, redirect
 from flask_debug import Debug
 from werkzeug.exceptions import abort
@@ -38,14 +40,20 @@ def index():
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
-
+        prerequisite = int(request.form["preq_range"])
         if not title:
             flash("Title is required!")
         if not content:
             flash("Text input is required!")
         else:
             # summary = stop_word.stop_word_vomit(content)
-            summary = token_freq.top_ten(content)
+            # summary = token_freq.top_ten(content)
+            summary = format_for_frontend(
+                select_criteria_sentences(
+                    weighting(sentences(content), basic_table(content)),
+                    prerequisite,
+                )
+            )
             conn = get_db_connection()
             conn.execute(
                 "INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)",
