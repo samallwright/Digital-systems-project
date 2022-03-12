@@ -6870,3 +6870,4 @@ sources/Pointer-Generator Networks Abigail See.pdf
 .venv/Lib/site-packages/itsdangerous-2.0.1.dist-info/top_level.txt
 .venv/Lib/site-packages/itsdangerous-2.0.1.dist-info/WHEEL
 .venv/Scripts/flask.exe
+*.pdf
