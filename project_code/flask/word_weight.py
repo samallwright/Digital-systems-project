@@ -1,39 +1,35 @@
-from turtle import position
-import nltk
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import sent_tokenize
 from numpy import sort
-
+from token_frequencies import word_freq_table
 from text_functions import get_text
-from token_freq import basic_table
+
 
 # input_text = get_text()
 
-
-def sentences(input_text: str) -> any:
-    return sent_tokenize(input_text)
-
-
-def weighting(sentence_tokens, frequency_table) -> dict:
-    weight = dict()
+# adds up weighted words value for each sentence
+# larger sentences by default have most value!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def sentence_scoring(sentence_tokens, scored_words) -> dict:
+    weighted_sentences = dict()
     for sentence in sentence_tokens:
-        wordcount_without_stop = 0
-        for word_weight in frequency_table:
-            if word_weight in sentence.lower():
-                wordcount_without_stop += 1
-                if sentence in weight:
-                    weight[sentence] += frequency_table[word_weight]
+        for word in scored_words:
+            if word.lower() in sentence.lower():  # if scored word is in sentence
+                if sentence in weighted_sentences:  # if sentence is already in new dict
+                    weighted_sentences[sentence] += scored_words[
+                        word
+                    ]  # weighted sentences value at position of sentence = value + word value
                 else:
-                    weight[sentence] = frequency_table[word_weight]
-
-    return weight
+                    weighted_sentences[sentence] = scored_words[
+                        word
+                    ]  # assignment of first words score to sentence
+    return weighted_sentences
 
 
 def select_criteria_sentences(weighted_sentences: dict, prerequisite: int) -> list:
-    prerequisite = prerequisite_percentage(weighted_sentences, prerequisite)
+    quartile_position = prerequisite_percentage(weighted_sentences, prerequisite)
     sentences = [
-        sentences
-        for sentences in weighted_sentences
-        if weighted_sentences[sentences] >= prerequisite
+        sentences_scores
+        for sentences_scores in weighted_sentences
+        if weighted_sentences[sentences_scores] >= quartile_position
     ]
     return sentences
 
@@ -43,7 +39,6 @@ def prerequisite_percentage(weighted_sentences: dict, prerequisite: int) -> int:
     quartile = get_quartile(weighted_sentences)
     sorted_importance = sort(list(weighted_sentences.values()))
     prerequisite_position = sorted_importance[quartile * prerequisite]
-    print(prerequisite, quartile, prerequisite_position)
     return prerequisite_position
 
 
@@ -54,14 +49,22 @@ def get_quartile(sents: dict) -> int:
     return int(size / 4)
 
 
-# print(weighting(sentences(input_text), basic_table(input_text)))
-# print(
-#     select_criteria_sentences(
-#         weighting(sentences(input_text), basic_table(input_text))
-#     )
-# )
+# print(sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)))
 # print(
 #     prerequisite_percentage(
-#         weighting(sentences(input_text), basic_table(input_text)), 0
+#         sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)), 3
 #     )
 # )
+# print(
+#     select_criteria_sentences(
+#         sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)), 3
+#     )
+# )
+
+
+# 1) number of times a word appears in
+# the article, (2) the number of words in the sentence that also appear
+# in the title of the article, or in section headings, (3) position of the
+# sentence in the article and in the section, (4) the number of sen-
+# tence words matching a pre-compiled list of cue words such as “In
+# sum”

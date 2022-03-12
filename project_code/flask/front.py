@@ -1,11 +1,13 @@
 from distutils.log import debug
 import sqlite3
 from turtle import pos
-from token_freq import basic_table
-from word_weight import select_criteria_sentences, sentences, weighting
+from token_frequencies import word_freq_table
+from nltk.tokenize import sent_tokenize
+from word_weight import select_criteria_sentences, sentence_scoring
 from text_functions import format_for_frontend
 from flask import Flask, render_template, request, url_for, flash, redirect
-from flask_debug import Debug
+
+# from flask_debug import Debug
 from werkzeug.exceptions import abort
 
 app = Flask(__name__)
@@ -50,7 +52,9 @@ def index():
             # summary = token_freq.top_ten(content)
             summary = format_for_frontend(
                 select_criteria_sentences(
-                    weighting(sentences(content), basic_table(content)),
+                    sentence_scoring(
+                        sent_tokenize(content), word_freq_table(content)
+                    ),
                     prerequisite,
                 )
             )

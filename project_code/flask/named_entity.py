@@ -1,6 +1,6 @@
 import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
-from open_test_text import get_text
+from text_functions import get_text
 from stop_word import stop_word_removal
 
 input_text = stop_word_removal(get_text())
