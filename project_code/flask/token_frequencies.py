@@ -1,13 +1,14 @@
+from cmath import log, log10
+from multiprocessing.sharedctypes import Value
 from pickle import FRAME
-import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import FreqDist, ngrams
 from text_functions import get_text
 from stop_word import stop_word_removal
 
 
-def basic_table(input_text: str) -> dict:
+def word_freq_table(input_text: str) -> dict:
     word_tokens = word_tokenize(stop_word_removal(input_text))
     word_frequency = dict()
     for token in word_tokens:
@@ -15,11 +16,40 @@ def basic_table(input_text: str) -> dict:
             word_frequency[token] = 1
         else:
             word_frequency[token] += 1
-    maxi = max(word_frequency.values())
-    word_cool = {key: value / maxi for (key, value) in word_frequency.items()}
-    # for word in word_frequency.keys():
-    #     word_frequency[word] = word_frequency[word] / maxi
-    return word_cool
+    word_sum = len(word_tokens)
+    scored_words = {key: value / word_sum for (key, value) in word_frequency.items()}
+
+    return scored_words
+
+
+def inverse_document_frequency(sentences, word_tokens) -> dict:
+    # idf = log(num_of_sentences/num_of_sentences_with_word)
+    sentence_count_for_word = dict()
+    for sentence in sentences:
+        for word in word_tokens:
+            if word.lower() in sentence.lower():
+                if word in sentence_count_for_word:
+                    sentence_count_for_word[word] += 1
+                else:
+                    sentence_count_for_word[word] = 1
+
+    # sentence_count_for_word[word] = log10(
+    #     len(sentences) / sentence_count_for_word[word]
+    # )
+    # print(sentence_count_for_word)
+    # sentence_count_for_word = {
+    #     key: log10(len(sentences) / sentence_count_for_word[value])
+    #     for (key, value) in sentence_count_for_word.items()
+    # }
+    length = len(sentences)
+    dictfun = dict()
+    for word, frequency in sentence_count_for_word.items():
+        dictfun[word] = log10(length / frequency)
+
+    print(dictfun)
+
+
+# inverse_document_frequency(sent_tokenize(get_text()), word_tokenize(get_text()))
 
 
 def token_dists(input_text: str) -> FreqDist:
@@ -65,6 +95,7 @@ def trigrams(tokens: FreqDist) -> dict:
 
 # stitching sentences with top ten word
 # also important infrquent words
+# words in title
 # how to select important infrequent
 # any sentence with top 3 words in, + any sentence with 10 least common words in, ordered
-# word pairs? (bigrams and trigrams)
+# word pairs? (bigrams, trigrams, phrases)
