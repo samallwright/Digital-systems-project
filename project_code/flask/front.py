@@ -1,13 +1,6 @@
 from distutils.log import debug
 import sqlite3
-from turtle import pos
-from token_frequencies import (
-    word_freq_table,
-    inverse_document_frequency,
-    tf_idf_combine,
-)
-from nltk.tokenize import sent_tokenize, word_tokenize
-from word_weight import select_criteria_sentences, sentence_scoring
+from summarizer import summarizer
 from flask import Flask, render_template, request, url_for, flash, redirect
 
 # from flask_debug import Debug
@@ -53,17 +46,7 @@ def index():
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            sentence_tokens = sent_tokenize(content)
-            word_tokens = word_tokenize(content)
-
-            tf_idf = tf_idf_combine(
-                word_freq_table(content),
-                inverse_document_frequency(sentence_tokens, word_tokens),
-            )
-            summary = select_criteria_sentences(
-                sentence_scoring(sentence_tokens, tf_idf),
-                prerequisite,
-            )
+            summary = summarizer(title, content, prerequisite)
             conn = get_db_connection()
             conn.execute(
                 "INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)",

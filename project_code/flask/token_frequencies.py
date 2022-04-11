@@ -4,11 +4,11 @@ from pickle import FRAME
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import FreqDist, ngrams
-from text_functions import get_text, stop_word_removal
+from text_functions import stop_word_removal
 
 
 def word_freq_table(input_text: str) -> dict:
-    word_tokens = word_tokenize(stop_word_removal(input_text))
+    word_tokens = stop_word_removal(input_text)
     word_frequency = dict()
     for token in word_tokens:
         if token not in word_frequency.keys():
@@ -53,7 +53,7 @@ def tf_idf_combine(term_frequencies, inverse_frequencies):
 
 
 def token_dists(input_text: str) -> FreqDist:
-    word_tokens = word_tokenize(stop_word_removal(input_text))
+    word_tokens = stop_word_removal(input_text)
     token_dist = FreqDist(word.lower() for word in word_tokens)
     return token_dist
 
