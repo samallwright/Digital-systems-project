@@ -20,15 +20,20 @@ def similarity_graph(sentence_tokens):
     # return
 
     # graphing
-    t0 = time.perf_counter()
+    matrix = []
+
     for static_sentence in sentence_tokens:
-        print(sentence_tokens.index(static_sentence))
+        scores = []
         for moving_sentence in sentence_tokens:
+            # print(
+            #     f"comparing {sentence_tokens.index(static_sentence)} against{sentence_tokens.index(moving_sentence)}"
+            # )
             if static_sentence != moving_sentence:
                 score = common_words(static_sentence, moving_sentence)
-                matrix[sentence_tokens.index(static_sentence)].append(score)
-    t1 = time.perf_counter() - t0
-    print("time elapsed:", t1 / 60)
+                # print(score)
+                scores.append(score)
+        matrix.append(scores)
+    print(matrix)
 
 
 def common_words(sentence_one, sentence_two):
@@ -37,17 +42,9 @@ def common_words(sentence_one, sentence_two):
     sentence_two = stop_word_removal(sentence_two)
     for one_word in sentence_one:
         for two_word in sentence_two:
-            # print(one_word, two_word, "MATCH" if one_word == two_word else "")
             if one_word == two_word:
                 counter += 1
-
-    print(sentence_one, sentence_two, str(counter))
     return counter
-
-
-matrix = [[], []]
-
-# list of sentence x against y,z,...
 
 
 def dot_product(A, B):
@@ -59,5 +56,7 @@ def cosign_similarity(a, b):
 
 
 input = get_text()
-
+t0 = time.perf_counter()
 similarity_graph(sent_tokenize(input))
+t1 = time.perf_counter() - t0
+print("time elapsed: %fs" % (t1))
