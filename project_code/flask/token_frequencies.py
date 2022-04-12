@@ -8,6 +8,7 @@ from text_functions import stop_word_removal
 
 
 def word_freq_table(input_text: str) -> dict:
+    """Scored words returns a dict of every word against the amount of times that word was counted, divided by the total word count"""
     word_tokens = stop_word_removal(input_text)
     word_frequency = dict()
     for token in word_tokens:
@@ -42,13 +43,11 @@ def tf_idf_combine(term_frequencies, inverse_frequencies):
     and a low document frequency of the term in the whole collection of documents;
     the weights hence tend to filter out common terms.
     tf-idf(t,d,D) = tf(t,d)*idf(t,D)"""
-
     tf_idf = dict()
     for key in term_frequencies.keys() & inverse_frequencies.keys():
         # print(term_frequencies[key])
         # print(inverse_frequencies[key])
         tf_idf[key] = term_frequencies[key] * inverse_frequencies[key]
-
     return tf_idf
 
 
