@@ -6,71 +6,80 @@ import time
 
 def similarity_graph(sentence_tokens):
     """Compare similarity between sentences to create ranking
-    table between every sentence against every sentence
-    """
+    table between every sentence against every sentence"""
+
     matrix = []
     for sentence_i in sentence_tokens:
         scores = []
         for sentence_k in sentence_tokens:
             if sentence_i != sentence_k:
-                score = common_words(sentence_i, sentence_k)
+                score = words_in_common(sentence_i, sentence_k)
                 scores.append(score)
         matrix.append(scores)
     return matrix
 
 
-def common_words(sentence_one, sentence_two):
+def words_in_common(sentence_one, sentence_two) -> int:
+    """Finds amount of words in common"""
+
     counter = 0
     sentence_one = stop_word_removal(sentence_one)
     sentence_two = stop_word_removal(sentence_two)
-    for one_word in sentence_one:
-        for two_word in sentence_two:
-            if one_word == two_word:
+    for word_one in sentence_one:
+        for word_two in sentence_two:
+            if word_one == word_two:
                 counter += 1
     return counter
 
 
 def graph_density(matrix, sentence_tokens):
     """creates density score of similar words against sentence length"""
-    matrict = []
-    for sentence_list in matrix:  # list of numbers in list of lists
-        counter = 0  # this is needed because index stops once it finds first occurence, doesnt actually track position in array
-        # print(sentence_list)
-        sentence_num = dict()
+
+    density_dicts = []
+    for sentence_list in matrix:
+        position = 0  # this is needed because index stops once it finds first occurence, doesnt actually track position in array
+        sentence_densities = dict()
         for sentence in sentence_list:  # number representing similarity cardinality
-            # print(sentence)
             if sentence != 0:
-                # print(sentence_tokens[counter])
-                length = len(word_tokenize(sentence_tokens[counter]))
-                # print(sentence / length)  # this is word in common / words in comparison sentence = density
-                sentence_num[counter] = sentence / length
+                length = len(word_tokenize(sentence_tokens[position]))
+                sentence_densities[position] = sentence / length
             else:
-                sentence_num[counter] = 0
-            counter += 1
-        matrict.append(sentence_num)
-    return matrict
+                sentence_densities[position] = 0
+            position += 1
+        density_dicts.append(sentence_densities)
+    return density_dicts
 
 
-def similarity_score(density_matrix: list, weighted_sentences: dict):
-    # compare most common sentence for current sentence
-    # whichever has lower weighting has sentence from weighted senences removed is removed
-    new_sentences = dict()
-    counter = 0
+def maximum_similarity(density_matrix: list) -> list:
+    """compare most common sentence for current sentence,
+    whichever has lower weighting has sentence from weighted senences removed is removed"""
+
+    most_similar_sentences = []
     for sentence in density_matrix:
-        if sentence != 0:
-            if counter != 0:  # filter out no commonality
-                print(sentence, prev_sentence)
-
-                prev_sentence = sentence
-            else:
-                prev_sentence = sentence
-        counter += 1
-    return
+        max_sentence = max(
+            sentence.items(), key=lambda k: k[1]
+        )  # creates tuples from dict values for sentence, returns max from result of lambda k which passes density(k[1]) as key
+        most_similar_sentences.append(max_sentence)
+    return most_similar_sentences
 
 
-def weakest_link(A_score, B_score):
+# could run tests with what number provides good summary
+def weakest_links(sentence_scores):
+    """returns a set of every sentence that is similar to another sentence, above baseline"""
+    similar_sentences = set()
+    for sentence in sentence_scores:
+        if sentence[1] >= 0:
+            similar_sentences.add(sentence[0])
+    return similar_sentences
 
-    return
+
+### you could add up every sentence score to corresponding sentences, which would indicate lots of other sentences having in common
+### or would it be that sentence should be kept and all others removed?
+# ask dad?
+def compare_ouputs(output_a, output_b):
+    print(output_a)
+    print("\n\n\n\n\n\n\n\n\n\n")
+    print(output_b)
 
 
 def dot_product(A, B):
