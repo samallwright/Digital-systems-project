@@ -48,13 +48,19 @@ def index():
             # summary = token_freq.top_ten(content)
             summary = summarizer(title, content, prerequisite)
             conn = get_db_connection()
-            conn.execute(
+            cursor = conn.cursor()
+            cursor.execute(
                 "INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)",
                 (title, content, summary),
             )
+            # conn.commit()
+
+            id = cursor.lastrowid
             conn.commit()
             conn.close()
-            return redirect(url_for("index"))
+            # return redirect(url_for("index"))
+            post = get_post(id)
+            return render_template("post.html", post=post)
 
     return render_template("main_page.html", posts=posts)
 
