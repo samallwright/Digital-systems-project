@@ -1,6 +1,4 @@
 from cmath import log, log10
-from multiprocessing.sharedctypes import Value
-from pickle import FRAME
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import FreqDist, ngrams
@@ -39,7 +37,7 @@ def inverse_document_frequency(sentences, word_tokens) -> dict:
 
 
 def tf_idf_combine(term_frequencies, inverse_frequencies):
-    """A high weight in tf–idf is reached by a high term frequency (in the given document)
+    """A high weight in tf-idf is reached by a high term frequency (in the given document)
     and a low document frequency of the term in the whole collection of documents;
     the weights hence tend to filter out common terms.
     tf-idf(t,d,D) = tf(t,d)*idf(t,D)"""
@@ -49,6 +47,21 @@ def tf_idf_combine(term_frequencies, inverse_frequencies):
         # print(inverse_frequencies[key])
         tf_idf[key] = term_frequencies[key] * inverse_frequencies[key]
     return tf_idf
+
+
+def position_score(tf_idf, sentences):
+    sentence_list = list(sentences)
+    high = 1
+    low = 0
+    bell_center = len(sentence_list) / 3
+    new_dict = dict()
+    for sentence in sentence_list:
+        if sentence_list.index(sentence) != 0:
+            new_dict[sentence] = -log10(sentence_list.index(sentence) / bell_center)
+        else:
+            new_dict[sentence] = 0
+        print(new_dict[sentence])
+    return
 
 
 def token_dists(input_text: str) -> FreqDist:
