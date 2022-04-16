@@ -1,4 +1,5 @@
 from cmath import log, log10
+from itertools import count
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import FreqDist, ngrams
@@ -68,11 +69,12 @@ def position_score(sentences):
     bell_sentence_length_delta = len(sentence_list) - bell_center
     for x in range(bell_sentence_length_delta):
         bell_height.append(0)
+
     newdict = dict()
     for x in range(len(sentence_list)):
         newdict[x] = bell_height[x]
 
-    return bell_height
+    return newdict
 
     # print(bell_height)
     # print(y_out)
@@ -85,9 +87,13 @@ def position_score(sentences):
     # plt.show()
 
 
-def combine_position_tf_idf(tf_idf, bell_height):
-
-    return
+def combine_position_tf_idf(weighted_sentences, bell_height):
+    luhn = dict()
+    counter = 0
+    for x in weighted_sentences:
+        luhn[x] = weighted_sentences[x].real * bell_height[counter]
+        counter += 1
+    return luhn
 
 
 def token_dists(input_text: str) -> FreqDist:

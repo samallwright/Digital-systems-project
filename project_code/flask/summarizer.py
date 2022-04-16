@@ -57,11 +57,28 @@ density = graph_density(matrix, stokens)
 tf_idf = tf_idf_combine(
     word_freq_table(input), inverse_document_frequency(stokens, wokens)
 )
+# print(tf_idf)
 bell_height = position_score(stokens)
-combine_position_tf_idf(tf_idf, bell_height)
-# weighted_sentences = sentence_scoring(stokens, tf_idf)
-# most_similar = maximum_similarity(density)
-# similar_sentences = weakest_links(most_similar)
-# filtered_sentences = word_removal(similar_sentences, weighted_sentences)
-# summary = select_criteria_sentences(filtered_sentences, 3)
-# print(summary)
+# print(bell_height)
+
+weighted_sentences = sentence_scoring(stokens, tf_idf)
+
+
+luhn_sentences = combine_position_tf_idf(weighted_sentences, bell_height)
+# print(luhn)
+most_similar = maximum_similarity(density)
+similar_sentences = weakest_links(most_similar)
+filtered_sentences = word_removal(similar_sentences, luhn_sentences)
+summary = select_criteria_sentences(filtered_sentences, 3)
+print(summary)
+
+
+# normal textrank is look at low similarity sentences, decide arbitrary amount of lowest to include
+# my version is remove most similar
+
+# options:
+# comparison between sentences, tournament style selection judging with score
+# remove all sentences with similarity
+# remove sentences with similarity over threshold of similarity
+# rank sentences based on number of other sentences found to be similar with
+# ^^^^most similar get removed
