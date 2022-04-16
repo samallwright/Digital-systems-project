@@ -18,22 +18,22 @@ from text_functions import get_text
 
 def summarizer(title, content, prerequisite):
     sentence_tokens = sent_tokenize(content)
-    word_tokens = word_tokenize(content)
-
-    tf_idf = tf_idf_combine(
-        word_freq_table(content),
-        inverse_document_frequency(sentence_tokens, word_tokens),
-    )
-    position_score(tf_idf, sentence_tokens)
-
     matrix = similarity_graph(sentence_tokens)
     density = graph_density(matrix, sentence_tokens)
     most_similar = maximum_similarity(density)
     similar_sentences = weakest_links(most_similar)
 
-    weighted_sentences = sentence_scoring(sentence_tokens, tf_idf)
-    filtered_sentences = word_removal(similar_sentences, weighted_sentences)
+    word_tokens = word_tokenize(content)
+    tf_idf = tf_idf_combine(
+        word_freq_table(content),
+        inverse_document_frequency(sentence_tokens, word_tokens),
+    )
 
+    weighted_sentences = sentence_scoring(sentence_tokens, tf_idf)
+    bell_height = position_score(sentence_tokens)
+    luhn_sentences = combine_position_tf_idf(weighted_sentences, bell_height)
+
+    filtered_sentences = word_removal(similar_sentences, luhn_sentences)
     summary = select_criteria_sentences(filtered_sentences, prerequisite)
     return summary
 
@@ -49,28 +49,27 @@ def word_removal(similar_sentences, weighted_sentences):
     return filtered_weighted_sentences
 
 
-input = get_text()
-wokens = word_tokenize(input)
-stokens = sent_tokenize(input)
-matrix = similarity_graph(stokens)
-density = graph_density(matrix, stokens)
-tf_idf = tf_idf_combine(
-    word_freq_table(input), inverse_document_frequency(stokens, wokens)
-)
-# print(tf_idf)
-bell_height = position_score(stokens)
-# print(bell_height)
+# input = get_text()
+# wokens = word_tokenize(input)
+# stokens = sent_tokenize(input)
+# matrix = similarity_graph(stokens)
+# density = graph_density(matrix, stokens)
+# tf_idf = tf_idf_combine(
+#     word_freq_table(input), inverse_document_frequency(stokens, wokens)
+# )
+# # print(tf_idf)
+# bell_height = position_score(stokens)
+# # print(bell_height)
 
-weighted_sentences = sentence_scoring(stokens, tf_idf)
+# weighted_sentences = sentence_scoring(stokens, tf_idf)
 
-
-luhn_sentences = combine_position_tf_idf(weighted_sentences, bell_height)
-# print(luhn)
-most_similar = maximum_similarity(density)
-similar_sentences = weakest_links(most_similar)
-filtered_sentences = word_removal(similar_sentences, luhn_sentences)
-summary = select_criteria_sentences(filtered_sentences, 3)
-print(summary)
+# luhn_sentences = combine_position_tf_idf(weighted_sentences, bell_height)
+# # print(luhn)
+# most_similar = maximum_similarity(density)
+# similar_sentences = weakest_links(most_similar)
+# filtered_sentences = word_removal(similar_sentences, luhn_sentences)
+# summary = select_criteria_sentences(filtered_sentences, 3)
+# print(summary)
 
 
 # normal textrank is look at low similarity sentences, decide arbitrary amount of lowest to include
