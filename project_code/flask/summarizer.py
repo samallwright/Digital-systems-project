@@ -3,6 +3,7 @@ from token_frequencies import (
     inverse_document_frequency,
     tf_idf_combine,
     position_score,
+    combine_position_tf_idf,
 )
 from word_weight import select_criteria_sentences, sentence_scoring
 from nltk.tokenize import word_tokenize, sent_tokenize
@@ -56,8 +57,8 @@ density = graph_density(matrix, stokens)
 tf_idf = tf_idf_combine(
     word_freq_table(input), inverse_document_frequency(stokens, wokens)
 )
-position_score(tf_idf, stokens)
-
+bell_height = position_score(stokens)
+combine_position_tf_idf(tf_idf, bell_height)
 # weighted_sentences = sentence_scoring(stokens, tf_idf)
 # most_similar = maximum_similarity(density)
 # similar_sentences = weakest_links(most_similar)
