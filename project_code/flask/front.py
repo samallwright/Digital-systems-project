@@ -14,9 +14,6 @@ TEMPLATES_AUTO_RELOAD = True
 app.config["SECRET_KEY"] = "your secret key"
 
 
-###.!!! REMEMBER TO CD INTO CORRECT FOLDER BEFORE FLASK RUN !!!###
-
-
 def get_db_connection():
     conn = sqlite3.connect("database.db")
     conn.row_factory = sqlite3.Row
@@ -38,6 +35,7 @@ def index():
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
+        query = request.form["query"]
         prerequisite = int(request.form["preq_range"])
         if not title:
             flash("Title is required!")
@@ -46,7 +44,7 @@ def index():
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            summary = summarizer(title, content, prerequisite)
+            summary = summarizer(title, content, query, prerequisite)
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
