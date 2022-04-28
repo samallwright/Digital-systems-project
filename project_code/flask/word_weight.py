@@ -11,7 +11,6 @@ def sentence_scoring(sentence_tokens, scored_words: dict) -> dict:
     for sentence in sentence_tokens:
         for word in scored_words:
             if word.lower() in sentence.lower():
-                # weighted_sentences[sentence] = 0.01
                 if sentence in weighted_sentences:
                     weighted_sentences[sentence] += scored_words[word]
                 else:
