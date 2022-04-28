@@ -5,22 +5,8 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk import FreqDist, ngrams
 from numpy import exp, pi, sqrt
 import numpy
-from text_functions import stop_word_removal
+from text_functions import stop_word_removal, word_stemming
 import matplotlib.pyplot as plt
-
-
-def word_freq_table(input_text: str) -> dict:
-    """Scored words returns a dict of every word against the amount of times that word was counted, divided by the total word count"""
-    word_tokens = stop_word_removal(input_text)
-    word_frequency = dict()
-    for token in word_tokens:
-        if token not in word_frequency.keys():
-            word_frequency[token] = 1
-        else:
-            word_frequency[token] += 1
-    word_sum = len(word_tokens)
-    scored_words = {key: value / word_sum for (key, value) in word_frequency.items()}
-    return scored_words
 
 
 def inverse_document_frequency(sentences, word_tokens) -> dict:
@@ -33,6 +19,7 @@ def inverse_document_frequency(sentences, word_tokens) -> dict:
                     sentence_count_for_word[word] += 1
                 else:
                     sentence_count_for_word[word] = 1
+
     length = len(sentences)
     inverse_freq = dict()
     for word, frequency in sentence_count_for_word.items():
@@ -67,8 +54,9 @@ def position_score(sentences):
     ).tolist()
 
     bell_sentence_length_delta = len(sentence_list) - bell_center
+
     for x in range(bell_sentence_length_delta):
-        bell_height.append(0)
+        bell_height.append(bell_height[0])
 
     newdict = dict()
     for x in range(len(sentence_list)):
@@ -91,40 +79,35 @@ def combine_position_tf_idf(weighted_sentences, bell_height):
     luhn = dict()
     counter = 0
     for x in weighted_sentences:
-        luhn[x] = weighted_sentences[x].real * bell_height[counter]
+        luhn[x] = weighted_sentences[x].real + bell_height[counter]
         counter += 1
     return luhn
 
 
-def token_dists(input_text: str) -> FreqDist:
+def token_dists(input_text: str) -> dict:
+    """returns a dict of every word against the amount of times
+    that word was counted, divided by the total word count"""
+
     word_tokens = stop_word_removal(input_text)
     token_dist = FreqDist(word.lower() for word in word_tokens)
-    return token_dist
+    word_sum = len(word_tokens)
+    scored_words = {key: value / word_sum for (key, value) in token_dist.items()}
 
+    # amount of times root is mentioned
+    token_stems = word_stemming(word_tokens)  # key:word, value:root
+    stemmed_freq = FreqDist(word.lower() for word in token_stems.values())
+    stem_sum = len(stemmed_freq)
+    # root_scores = dict()
+    # for word, root in token_stems.items():
+    #     # print(word)
+    #     # print(root)
+    #     # print(stemmed_freq[root])
+    #     root_scores[word] = stemmed_freq[root] / stem_sum
+    root_scores = {
+        word: stemmed_freq[root] / stem_sum for (word, root) in token_stems.items()
+    }
 
-def top_ten(tokens: FreqDist) -> list:
-    return tokens.most_common(10)
-
-
-def bottom_10(tokens: FreqDist) -> list:
-    return tokens.most_common()[-10:]
-
-
-def single_occurrence(tokens: FreqDist) -> list:
-    list = tokens.most_common()[-1000:]
-    new_list = []
-    for tuple in list:
-        if tuple[1] == 1:
-            new_list.append(tuple)
-    return new_list
-
-
-def bigrams(tokens: FreqDist) -> dict:
-    return dict(FreqDist(ngrams(tokens, 3)))
-
-
-def trigrams(tokens: FreqDist) -> dict:
-    return dict(FreqDist(ngrams(tokens, 3)))
+    return root_scores
 
 
 # input_text = get_text()

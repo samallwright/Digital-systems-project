@@ -1,5 +1,11 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from nltk.stem import (
+    PorterStemmer,
+    LancasterStemmer,
+    WordNetLemmatizer,
+    SnowballStemmer,
+)
 
 
 def get_text() -> str:
@@ -26,14 +32,8 @@ def stop_word_removal(input_text):
     # return " ".join(filtered_sentence)
     return filtered_sentence
 
-def word_query(input) -> list:
-    # return important key word sentences + words from title?
-    return
 
-
-def cue_words():
-    return
-
-
-def stigma_words():
-    return
+def word_stemming(text):
+    ls = LancasterStemmer()
+    lstems = {word: ls.stem(word) for word in text}
+    return lstems
