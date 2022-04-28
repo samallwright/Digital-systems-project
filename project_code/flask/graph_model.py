@@ -1,7 +1,5 @@
-from tracemalloc import stop
 from nltk import sent_tokenize, word_tokenize
 from text_functions import get_text, stop_word_removal
-import time
 
 
 def similarity_graph(sentence_tokens):
@@ -51,8 +49,7 @@ def graph_density(matrix, sentence_tokens):
 
 
 def maximum_similarity(density_matrix: list) -> list:
-    """compare most common sentence for current sentence,
-    whichever has lower weighting has sentence from weighted senences removed is removed"""
+    """gets highest similarity sentence for each sentence from graph"""
 
     most_similar_sentences = []
     for sentence in density_matrix:
@@ -65,17 +62,18 @@ def maximum_similarity(density_matrix: list) -> list:
 
 # could run tests with what number provides good summary
 def weakest_links(sentence_scores):
-    """returns a set of every sentence that is similar to another sentence, above baseline"""
+    """filters highest similarity sentences above baseline"""
     similar_sentences = set()
     for sentence in sentence_scores:
-        if sentence[1] >= 0:
+        if sentence[1] >= 0.05:
             similar_sentences.add(sentence[0])
     return similar_sentences
 
 
 ### you could add up every sentence score to corresponding sentences, which would indicate lots of other sentences having in common
 ### or would it be that sentence should be kept and all others removed?
-# ask dad?
+### could take 50/75% of the most similar sentences, making a dict of sentences and number of sentences in common
+# how to score position?
 def compare_ouputs(output_a, output_b):
     print(output_a)
     print("\n\n\n\n\n\n\n\n\n\n")

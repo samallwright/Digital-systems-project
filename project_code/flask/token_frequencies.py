@@ -12,14 +12,23 @@ import matplotlib.pyplot as plt
 def inverse_document_frequency(sentences, word_tokens) -> dict:
     """idf = log(num_of_sentences/num_of_sentences_with_word)"""
     sentence_count_for_word = dict()
+    token_stems = word_stemming(word_tokens)  # key:word, value:root
+    # for sentence in sentences:
+    #     for word in word_tokens:
+    #         if word.lower() in sentence.lower():
+    #             if word in sentence_count_for_word:
+    #                 sentence_count_for_word[word] += 1
+    #             else:
+    #                 sentence_count_for_word[word] = 1
     for sentence in sentences:
-        for word in word_tokens:
-            if word.lower() in sentence.lower():
+        words = word_tokenize(sentence)
+        stemmed_sentence = word_stemming(words)
+        for word, stem in token_stems.items():
+            if stem.lower() in stemmed_sentence.values():
                 if word in sentence_count_for_word:
                     sentence_count_for_word[word] += 1
                 else:
                     sentence_count_for_word[word] = 1
-
     length = len(sentences)
     inverse_freq = dict()
     for word, frequency in sentence_count_for_word.items():
@@ -89,9 +98,9 @@ def token_dists(input_text: str) -> dict:
     that word was counted, divided by the total word count"""
 
     word_tokens = stop_word_removal(input_text)
-    token_dist = FreqDist(word.lower() for word in word_tokens)
-    word_sum = len(word_tokens)
-    scored_words = {key: value / word_sum for (key, value) in token_dist.items()}
+    # token_dist = FreqDist(word.lower() for word in word_tokens)
+    # word_sum = len(word_tokens)
+    # scored_words = {key: value / word_sum for (key, value) in token_dist.items()}
 
     # amount of times root is mentioned
     token_stems = word_stemming(word_tokens)  # key:word, value:root
@@ -99,9 +108,6 @@ def token_dists(input_text: str) -> dict:
     stem_sum = len(stemmed_freq)
     # root_scores = dict()
     # for word, root in token_stems.items():
-    #     # print(word)
-    #     # print(root)
-    #     # print(stemmed_freq[root])
     #     root_scores[word] = stemmed_freq[root] / stem_sum
     root_scores = {
         word: stemmed_freq[root] / stem_sum for (word, root) in token_stems.items()

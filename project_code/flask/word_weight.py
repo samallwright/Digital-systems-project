@@ -1,19 +1,17 @@
-from nltk.tokenize import sent_tokenize, word_tokenize
 from numpy import sort
-from token_frequencies import (
-    word_freq_table,
-    tf_idf_combine,
-    inverse_document_frequency,
-)
+
 
 # from text_functions import get_text
 
 
 def sentence_scoring(sentence_tokens, scored_words: dict) -> dict:
+    """Combines scores from word frequency/word total to score
+    every sentence in document"""
     weighted_sentences = dict()
     for sentence in sentence_tokens:
         for word in scored_words:
             if word.lower() in sentence.lower():
+                # weighted_sentences[sentence] = 0.01
                 if sentence in weighted_sentences:
                     weighted_sentences[sentence] += scored_words[word]
                 else:
