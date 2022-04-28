@@ -12,6 +12,9 @@
         <label for="query">Cue word query</label>
         <input type="text" name="query" class="form-control" placeholder="Enter cue words">{{ request.form['query']
         }}</input>
+        <label for="stigma">Topics not valued</label>
+        <input type="text" name="stigma" class="form-control" placeholder="Enter topics to avoid">{{ request.form['stigma']
+        }}</input>
         <div class="form-group">
             <label for="content">Submit text</label>
             <textarea name="content" class="form-control"

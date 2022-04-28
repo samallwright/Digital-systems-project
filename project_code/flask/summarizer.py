@@ -1,6 +1,5 @@
-from cue_words import cue_word_combine, find_cue_words
+from cue_words import cue_word_combine, find_cue_words, cue_score
 from token_frequencies import (
-    word_freq_table,
     inverse_document_frequency,
     tf_idf_combine,
     position_score,
@@ -18,7 +17,7 @@ from graph_model import (
 from text_functions import get_text
 
 
-def summarizer(title, content, query, prerequisite):
+def summarizer(title, content, query, stigma, prerequisite):
     sentence_tokens = sent_tokenize(content)
     matrix = similarity_graph(sentence_tokens)
     density = graph_density(matrix, sentence_tokens)
@@ -27,7 +26,6 @@ def summarizer(title, content, query, prerequisite):
 
     word_tokens = word_tokenize(content)
     tf_idf = tf_idf_combine(
-        # word_freq_table(content),
         token_dists(content),
         inverse_document_frequency(sentence_tokens, word_tokens),
     )
@@ -35,11 +33,11 @@ def summarizer(title, content, query, prerequisite):
     weighted_sentences = sentence_scoring(sentence_tokens, tf_idf)
     bell_height = position_score(sentence_tokens)
     luhn_sentences = combine_position_tf_idf(weighted_sentences, bell_height)
-    cue_frequencies = find_cue_words(title, query, sentence_tokens)
-    # cue_score = cue_score(cue_frequencies)
-    # edmunson_sentences = cue_word_combine(luhn_sentences, cue_score)
+    cue_frequencies = find_cue_words(title, query, stigma, sentence_tokens)
+    cue_density = cue_score(cue_frequencies, sentence_tokens)
+    edmunson_sentences = cue_word_combine(luhn_sentences, cue_density)
 
-    filtered_sentences = word_removal(similar_sentences, luhn_sentences)
+    filtered_sentences = word_removal(similar_sentences, edmunson_sentences)
     summary = select_criteria_sentences(filtered_sentences, prerequisite)
     return summary
 

@@ -36,6 +36,7 @@ def index():
         title = request.form["title"]
         content = request.form["content"]
         query = request.form["query"]
+        stigma = request.form["stigma"]
         prerequisite = int(request.form["preq_range"])
         if not title:
             flash("Title is required!")
@@ -44,7 +45,7 @@ def index():
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            summary = summarizer(title, content, query, prerequisite)
+            summary = summarizer(title, content, query, stigma, prerequisite)
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
