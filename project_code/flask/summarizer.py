@@ -19,7 +19,7 @@ from text_functions import get_text
 from rouge_test import rouge_1
 
 
-def summarizer(title, content, query, stigma, prerequisite):
+def summarizer(title, content, query, stigma, prerequisite, size):
     sentence_tokens = sent_tokenize(content)
     matrix = similarity_graph(sentence_tokens)
     density = graph_density(matrix, sentence_tokens)
@@ -40,9 +40,11 @@ def summarizer(title, content, query, stigma, prerequisite):
     edmunson_sentences = cue_word_combine(luhn_sentences, cue_density)
 
     filtered_sentences = word_removal(similar_sentences, edmunson_sentences)
-    summary = select_criteria_sentences(filtered_sentences, prerequisite)
-    rouge_results = rouge_1(summary, content)
-    return summary, rouge_results
+    summary = select_criteria_sentences(filtered_sentences, prerequisite, size)
+    rouge_results = str(rouge_1(summary, content))
+    stats=""
+    # stats = f"{words_removed} words removed. \n Reduction of {reduction} \n Summarised in {speed}"
+    return summary, rouge_results, stats
 
 
 def word_removal(similar_sentences, weighted_sentences):

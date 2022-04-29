@@ -10,23 +10,29 @@
         <input type="text" name="title" class="form-control" placeholder="Enter title">{{ request.form['title']
         }}</input>
         <br>
+        <div>
         <label for="query">Cue word query</label>
         <input type="text" name="query" class="form-control" placeholder="Enter cue words">{{ request.form['query']
         }}</input>
-        <br>
+
         <label for="stigma">Topics not valued</label>
         <input type="text" name="stigma" class="form-control" placeholder="Enter topics to avoid">{{ request.form['stigma']
-        }}</input>
+        }}</input></div>
         <br>
         <div class="form-group">
             <label for="content">Submit text</label>
-            <textarea name="content" class="form-control" rows="10" cols="40"
+            <textarea name="content" class="form-control" rows="8" cols="40"
                 placeholder="Enter text">{{ request.form['content'] }}</textarea>
-
-            <div id="textHelp" class="form-text">Decide level of summary</div>
-            <label for="preq_range" class="form-label">Level of summary</label>
+            <div>
+            <br>
+            <label for="preq_range" class="form-label">Level of summary</label><br>
+            <div id="textHelp" class="form-text">Decide level of summary <br>(0%, 25%, 50%, 75%)</div>
             <input type="range" class="form-range" min="0" max="3" step="1" name="preq_range">
-
+            </div>
+            <div>
+            <label for "size" class="form-label">Or choose amount of sentences (Leave 0 for slider)</label>
+            <input type="number" name="size" class="form-control" min="0" max="25" style= "width:100px;" placeholder="">{{ request.form['size']
+    }}</input></div>
         </div>
         <div class="form-group">
 

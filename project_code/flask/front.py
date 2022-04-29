@@ -39,15 +39,18 @@ def index():
         query = request.form["query"]
         stigma = request.form["stigma"]
         prerequisite = int(request.form["preq_range"])
+        size = int(request.form["size"])
         if not title:
             flash("Title is required!")
         if not content:
             flash("Text input is required!")
+        if size == 0 and prerequisite == 0:
+            flash("Choose EITHER quantity or %")
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            summary, rouge_results = summarizer(
-                title, content, query, stigma, prerequisite
+            summary, rouge_results, stats = summarizer(
+                title, content, query, stigma, prerequisite, size
             )
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -62,7 +65,6 @@ def index():
             # return redirect(url_for("index"))
             post = get_post(id)
             return render_template("post.html", post=post)
-
     return render_template("main_page.html")
 
 
