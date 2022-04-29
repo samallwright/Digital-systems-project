@@ -1,3 +1,4 @@
+import rouge
 from cue_words import cue_word_combine, find_cue_words, cue_score
 from token_frequencies import (
     inverse_document_frequency,
@@ -15,6 +16,7 @@ from graph_model import (
     weakest_links,
 )
 from text_functions import get_text
+from rouge_test import rouge_1
 
 
 def summarizer(title, content, query, stigma, prerequisite):
@@ -39,7 +41,8 @@ def summarizer(title, content, query, stigma, prerequisite):
 
     filtered_sentences = word_removal(similar_sentences, edmunson_sentences)
     summary = select_criteria_sentences(filtered_sentences, prerequisite)
-    return summary
+    rouge_results = rouge_1(summary, content)
+    return summary, rouge_results
 
 
 def word_removal(similar_sentences, weighted_sentences):
