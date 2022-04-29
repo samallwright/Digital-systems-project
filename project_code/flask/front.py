@@ -49,14 +49,14 @@ def index():
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            summary, rouge_results, stats = summarizer(
+            summary, rouge_results, removed, reduction, speed = summarizer(
                 title, content, query, stigma, prerequisite, size
             )
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO posts (title, content, summary, rouge) VALUES (?, ?, ?, ?)",
-                (title, content, summary, rouge_results),
+                "INSERT INTO posts (title, content, summary, rouge, removed, reduction, speed) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (title, content, summary, rouge_results, removed, reduction, speed),
             )
 
             id = cursor.lastrowid

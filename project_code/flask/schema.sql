@@ -6,5 +6,8 @@ CREATE TABLE posts (
     title TEXT NOT NULL,
     content TEXT NOT NULL,
     summary TEXT NOT NULL,
-    rouge TEXT NOT NULL
+    rouge TEXT NOT NULL,
+    removed TEXT NOT NULL,
+    reduction TEXT NOT NULL,
+    speed TEXT NOT NULL
 );

@@ -9,7 +9,7 @@ with open("schema.sql") as f:
 cur = connection.cursor()
 
 cur.execute(
-    "INSERT INTO posts (title, content, summary, rouge) VALUES (?, ?, ?, ?)",
+    "INSERT INTO posts (title, content, summary, rouge, removed, reduction, speed) VALUES (?, ?, ?, ?, ?, ?, ?)",
     (
         "Example Post",
         """Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -33,6 +33,9 @@ cur.execute(
              quis, fermentum non velit. Proin sit amet velit posuere, facilisis magna et,
              semper justo. Nunc a nisl et erat ultricies pellentesque eu ullamcorper leo""",
         "Dummy Rouge Score",
+        "Removed :0",
+        "Reduction: 0%",
+        "speed: instant"
     ),
 )
 

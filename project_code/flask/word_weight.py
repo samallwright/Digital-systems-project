@@ -25,7 +25,7 @@ def select_criteria_sentences(
         selection = sentences(weighted_sentences, size)
     else:
         selection = quartile(weighted_sentences, prerequisite)
-    return str("".join(selection))
+    return str("".join(selection)), len(weighted_sentences), len(selection)
 
 
 def quartile(weighted_sentences: dict, prerequisite: int) -> list:

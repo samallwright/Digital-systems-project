@@ -9,6 +9,10 @@
     <h3>{% block title %} {{ post['title'] }} {% endblock %}</h2>
     <p><mark>{{ post['summary'] }}</mark></p>
     <br>
+    <h4>Statistics</h4>
+    <p>Sentences Removed: {{post['removed']}}</p>
+    <p>Reduction of: {{post["reduction"]}} %</p>
+    <p>Summarised in: {{post["speed"]}} seconds</p>
     <h4>ROUGE results</h4>
     <p>{{post['rouge']}}</p>
     <br>
