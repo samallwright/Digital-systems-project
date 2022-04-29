@@ -20,6 +20,11 @@ def get_db_connection():
     return conn
 
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
 @app.route(
     "/",
     methods=(
@@ -28,10 +33,6 @@ def get_db_connection():
     ),
 )
 def index():
-    conn = get_db_connection()
-    posts = conn.execute("SELECT * FROM posts").fetchall()
-    conn.close()
-
     if request.method == "POST":
         title = request.form["title"]
         content = request.form["content"]
@@ -45,14 +46,15 @@ def index():
         else:
             # summary = stop_word.stop_word_vomit(content)
             # summary = token_freq.top_ten(content)
-            summary = summarizer(title, content, query, stigma, prerequisite)
+            summary, rouge_results = summarizer(
+                title, content, query, stigma, prerequisite
+            )
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO posts (title, content, summary) VALUES (?, ?, ?)",
-                (title, content, summary),
+                "INSERT INTO posts (title, content, summary, rouge) VALUES (?, ?, ?, ?)",
+                (title, content, summary, rouge_results),
             )
-            # conn.commit()
 
             id = cursor.lastrowid
             conn.commit()
@@ -61,7 +63,15 @@ def index():
             post = get_post(id)
             return render_template("post.html", post=post)
 
-    return render_template("main_page.html", posts=posts)
+    return render_template("main_page.html")
+
+
+@app.route("/posts")
+def list_posts():
+    conn = get_db_connection()
+    posts = conn.execute("SELECT * FROM posts").fetchall()
+    conn.close()
+    return render_template("list_posts.html", posts=posts)
 
 
 @app.route("/<int:post_id>")

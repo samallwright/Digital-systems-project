@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>
+<h1>{% block title %}
+Designing a Natural Language Processing system to generate multiple levels of reductions in text
+using generic and query-based summarization techniques.
+{% endblock %}</h1>
+</p>
+
+<body>
+<p>
+<h4>
+Using natural language processing to create a system that can through a combination of techniques;
+extract, abstract and generate a textual summary from any given textual input.
+The desire for this system comes from the lack of choice in technique for previous summarisation tooling,
+as well as the lack of choice in the desired summaries brevity.
+</h4>
+</p>
+<br>
+<p>
+The objectives of this project are to implement a system for web-based, generalized, single document summarization
+using extractive summarization as the base model and then expanding on said system using combined methods
+to increase effectivity. The system will combine methods seen in literature and utilize human derived input
+to increase accuracy, using length, structure, and query-based modifiers. The purpose behind developing this
+tool is to attempt to find a more effective and efficient method for summarisation while constrained by time
+complexity. Further, summarisation itself is a valuable domain to improve human efficiency but has not
+received much commercial or practical focus. ‘Along with the growth of the internet and big data […] people
+[get] overwhelmed by the large information and documents on the internet’ (Widyassari, et al., 2022).
+</p>
+<p>
+A consistent and effective summarisation tool in industries would become incredibly useful, examples being
+lawyers (Hachey & Grover, 2005), doctors or scientists (Teufel & Moens, 2002) who all spend considerable time
+reading professional texts. Further, summarisation could provide benefits to those who are disadvantaged in
+reading. With an easy to use, consistent summarisation engine, we could also help people with learning
+disabilities, neurodivergent conditions and eyesight issues. Those with Dyslexia, eyesight issues or ADHD might
+struggle with reading large amounts of text due to either the visual chunkiness of it or the ability to stay
+focused for a long period of time, this tool could provide benefits to their comprehension. Applications
+behind this could apply to non-fluent second language speakers who want to grasp main ideas from articles,
+journals, reports, etc. but find difficulty with longer text due to time or complexity.
+</p>
+<p>
+Research often choses a singular approach and attempts the best iteration of it with small changes to
+previous work. Other work attempts optimal new approaches but with limited domain-specific success. While
+attempting to optimise, less work has been put into summarisation services. Examples online frequently provide
+standard solutions, solutions lacking granularity, or don’t address common issues found. Evaluations of
+summarisation has been a contentious issue in research (Liddy, 2001), with automated evaluations such as
+ROUGE assessing for informativity, or assessing similarity to human written summaries (Aries, et al., 2019).
+Regardless issues with objectivity remain (Lloret & Palomar, 2012) hence my system focuses on real world
+value. Semantic methods are currently in vogue, yet produce less viable or coherent summarisations
+(Allahyari, et al., 2017) (Roy, 2020) or are constrained by domain, whereas statistical methods present the
+‘anaphora’ problem; summaries of lesser value when measured by density of new information.
+</p>
+<p>
+Despite less focus on extractive summarisation recently, work is still being done and presents a higher floor
+– but perhaps a lower ceiling than abstractive techniques. However, ‘Statistical methods are more fast and
+simple’ (Aries, et al., 2019) and provide a foundation that is possible to be boosted (Aries, et al., 2019)
+in performance. I hope to combine multiple techniques to make an effective, efficient, and consistent tool
+that presents a viable alternative to less complex online summarisation websites.
+</p>
+
+</body>
+{% endblock %}

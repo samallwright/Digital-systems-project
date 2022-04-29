@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<p>
 <h1>{% block title %} TextSum {% endblock %}</h1>
-
+</p>
 <form method="post">
     <div class="form-group">
         <label for="title">Submit title</label>
         <input type="text" name="title" class="form-control" placeholder="Enter title">{{ request.form['title']
         }}</input>
-
+        <br>
         <label for="query">Cue word query</label>
         <input type="text" name="query" class="form-control" placeholder="Enter cue words">{{ request.form['query']
         }}</input>
+        <br>
         <label for="stigma">Topics not valued</label>
         <input type="text" name="stigma" class="form-control" placeholder="Enter topics to avoid">{{ request.form['stigma']
         }}</input>
+        <br>
         <div class="form-group">
             <label for="content">Submit text</label>
-            <textarea name="content" class="form-control"
+            <textarea name="content" class="form-control" rows="10" cols="40"
                 placeholder="Enter text">{{ request.form['content'] }}</textarea>
 
             <div id="textHelp" class="form-text">Decide level of summary</div>
@@ -26,15 +29,10 @@
 
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
+
+            <button type="submit" class="btn btn-primary">            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
+                <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v12zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1z"/>
+              </svg>   Submit</button>
         </div>
 </form>
-
-{% for post in posts %}
-<a href="{{url_for('post', post_id=post['id']) }}">
-    <h2>{{ post['title'] }}</h2>
-</a>
-<span class="badge badge-primary">{{ post['created'] }}</span>
-<hr>
-{% endfor %}
 {% endblock %}
