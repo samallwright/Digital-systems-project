@@ -230,9 +230,17 @@ def test_find_cue_words():
 
 
 def test_cue_score():
-    cue_score
-    result = False
-    assert result
+    text = get_text()
+    sents = sent_tokenize(text)
+    freqs = find_cue_words("Venus test text title", "query", "stigma", sents)
+    score = cue_score(freqs, sents)
+
+    assert type(score) == dict
+    for pos, density in score.items():
+        if score[pos] != 0:
+            assert len(word_tokenize(sents[0])) != 0
+            density = freqs[pos] / len(word_tokenize(sents[pos]))
+            assert score[pos] == density
 
 
 def test_cue_word_combine():
