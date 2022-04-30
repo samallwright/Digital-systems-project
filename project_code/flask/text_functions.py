@@ -10,9 +10,12 @@ from nltk.stem import (
 
 def get_text() -> str:
     with open(
-        # "Project\\project_code\\flask\\test_text.txt", "r", encoding="utf-8"
+        # "Project\\project_code\\flask\\test_text.txt",
+        # "r",
+        # encoding="utf-8"
         "project_code\\flask\\test_text.txt",
         encoding="utf-8",
+        # "test_text.txt", encoding="utf-8"
     ) as test_text:
         text = test_text.read()
     return text
