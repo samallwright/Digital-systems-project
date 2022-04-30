@@ -3,7 +3,7 @@ from nltk import word_tokenize
 from text_functions import stop_word_removal
 
 
-def find_cue_words(title: str, query: str, stigma: str, content: str) -> list:
+def find_cue_words(title: str, query: str, stigma: str, content: str) -> dict:
     """uses cue and query words to influence weighting for summarisation"""
     cue_words = set(word for word in stop_word_removal(title + " " + query))
     stigma_words = set(word.lower() for word in stop_word_removal(stigma))
