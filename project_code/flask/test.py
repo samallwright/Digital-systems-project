@@ -31,14 +31,6 @@ from nltk import word_tokenize, sent_tokenize
 # pytest test.py
 
 
-def test_always_pass():
-    assert True
-
-
-def test_always_fail():
-    assert False
-
-
 def test_word_stemming():
     original_text = get_text()
     text_tokens = word_tokenize(original_text)
@@ -109,10 +101,6 @@ def test_inverse_document_frequency():
     }
     for word in test_scores.keys():
         assert scores[word] == test_scores[word]
-
-
-# text = get_text()
-# print(inverse_document_frequency(sent_tokenize(text), word_tokenize(text)))
 
 
 def test_tf_idf_combine():
@@ -198,7 +186,7 @@ def test_find_cue_words():
     assert list(cue_freq.values())[0] == 1
 
 
-def test_cue_score():
+def test_cue_score_types():
     text = get_text()
     sents = sent_tokenize(text)
     freqs = find_cue_words("Venus test text title", "query", "stigma", sents)
@@ -207,9 +195,28 @@ def test_cue_score():
     assert type(score) == dict
     for pos, density in score.items():
         if score[pos] != 0:
+            assert type(score[pos]) == float
+
+
+def test_cue_score():
+    text = get_text()
+    sents = sent_tokenize(text)
+    freqs = find_cue_words("Venus test text title", "query", "stigma", sents)
+    score = cue_score(freqs, sents)
+    for pos, density in score.items():
+        if score[pos] != 0:
             assert len(word_tokenize(sents[0])) != 0
             density = freqs[pos] / len(word_tokenize(sents[pos]))
             assert score[pos] == density
+
+
+def test_cue_word_combine_type():
+    luhn_sentences = {"sentence": 1}
+    score = {0: 2}
+
+    result = cue_word_combine(luhn_sentences, score)
+    assert type(result) == dict
+    assert type(list(result.keys())[0]) == str
 
 
 def test_cue_word_combine():
@@ -217,7 +224,6 @@ def test_cue_word_combine():
     score = {0: 2}
 
     result = cue_word_combine(luhn_sentences, score)
-    assert type(result) == dict
     for sentence, value in result.items():
         assert sentence == "sentence"
         assert value == 3
@@ -263,56 +269,139 @@ def test_graph_density():
 
 def test_maximum_similarity():
     result = maximum_similarity([{1: 0.2}, {1: 0.4}, {1: 0.4}])
-    max_sentence = max(result.items(), key=lambda k: k[1])
-    assert max_sentence == 0
+    assert type(result) == list
+    assert result == [(1, 0.2), (1, 0.4), (1, 0.4)]
 
 
 def test_weakest_links():
-    weakest_links
-    result = False
-    assert result
+    result = weakest_links([(1, 0.2), (1, 0.4), (1, 0.4)])
+    assert result == {1}
 
 
 def test_word_removal():
-    word_removal
-    result = False
-    assert result
+    edmundson = {
+        "sentence one for similarity. ": 0.2,
+        "sentence two is different. ": 0.4,
+        "sentence three more so but still different. ": 0.4,
+    }
+    filtered = word_removal({1}, edmundson)
+    assert filtered == {
+        "sentence one for similarity. ": 0.2,
+        "sentence three more so but still different. ": 0.4,
+    }
 
 
 def test_sentence_scoring():
-    sentence_scoring
-    result = False
-    assert result
+    tf_idf = {
+        "sentence": 3,
+        "one": 1,
+        "for": 1,
+        "similarity": 1,
+        "two": 1,
+        "is": 1,
+        "different": 2,
+        "three": 1,
+        "more": 1,
+        "so": 1,
+        "but": 1,
+        "still": 1,
+        "different": 1,
+    }
+    text = "sentence one for similarity. sentence two is different. sentence three more so but still different. "
+    sents = sent_tokenize(text)
+    result = sentence_scoring(sents, tf_idf)
+    assert result == {
+        "sentence one for similarity.": 6,
+        "sentence two is different.": 6,
+        "sentence three more so but still different.": 9,
+    }
 
 
 def test_sentences():
-    sentences
-    result = False
-    assert result
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+    }
+    result = sentences(sentence_weighted, 1)
+    assert result == ["sentence three more so but still different."]
 
 
 def test_get_quartile():
-    get_quartile
-    result = False
-    assert result
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+        "sentence four for similarity.": 0.2,
+        "sentence five is different.": 0.3,
+        "sentence six more so but still different.": 0.4,
+    }
+    result = get_quartile(sentence_weighted)
+    assert result == 1
 
 
 def test_prerequisite_percentage():
-    prerequisite_percentage
-    result = False
-    assert result
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+        "sentence four for similarity.": 0.2,
+        "sentence five is different.": 0.3,
+        "sentence six more so but still different.": 0.4,
+    }
+    result = prerequisite_percentage(sentence_weighted, 3)
+    assert result == 0.3
 
 
 def test_quartile():
-    quartile
-    result = False
-    assert result
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+        "sentence four for similarity.": 0.2,
+        "sentence five is different.": 0.3,
+        "sentence six more so but still different.": 0.4,
+    }
+    result = quartile(sentence_weighted, 3)
+
+    assert result == [
+        "sentence three more so but still different.",
+        "sentence six more so but still different.",
+    ]
 
 
 def test_select_criteria_sentences():
-    select_criteria_sentences
-    result = False
-    assert result
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+        "sentence four for similarity.": 0.2,
+        "sentence five is different.": 0.3,
+        "sentence six more so but still different.": 0.4,
+    }
+
+    result, sentlen, sumlen = select_criteria_sentences(sentence_weighted, 3, 0)
+    assert (
+        result
+        == """sentence three more so but still different.sentence six more so but still different."""
+    )
+
+
+def test_select_criteria_sentences_size():
+    sentence_weighted = {
+        "sentence one for similarity.": 0.2,
+        "sentence two is different.": 0.3,
+        "sentence three more so but still different.": 0.4,
+        "sentence four for similarity.": 0.2,
+        "sentence five is different.": 0.3,
+        "sentence six more so but still different.": 0.4,
+    }
+
+    result, sentlen, sumlen = select_criteria_sentences(sentence_weighted, 0, 4)
+    assert (
+        result
+        == """sentence two is different.sentence three more so but still different.sentence five is different.sentence six more so but still different."""
+    )
 
 
 # run_unit_state_tests()
