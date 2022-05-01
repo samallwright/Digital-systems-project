@@ -15,7 +15,8 @@ def get_text() -> str:
         # encoding="utf-8"
         # "project_code\\flask\\test_text.txt",
         # encoding="utf-8",
-        "test_text.txt", encoding="utf-8"
+        "test_text.txt",
+        encoding="utf-8",
     ) as test_text:
         text = test_text.read()
     return text

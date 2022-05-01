@@ -1,9 +1,6 @@
 from numpy import sort
 
 
-# from text_functions import get_text
-
-
 def sentence_scoring(sentence_tokens, scored_words: dict) -> dict:
     """Combines scores from word frequency/word total to score
     every sentence in document"""
@@ -33,7 +30,7 @@ def quartile(weighted_sentences: dict, prerequisite: int) -> list:
     sentences = [
         sentences_scores
         for sentences_scores in weighted_sentences
-        if weighted_sentences[sentences_scores] >= quartile_position
+        if weighted_sentences[sentences_scores] > quartile_position
     ]
     return sentences
 
@@ -62,30 +59,3 @@ def sentences(weighted_sentences: dict, size: int) -> list:
         if score >= size_score
     ]
     return sentences
-
-
-# input_text = get_text()
-# print(sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)))
-# print(
-#     prerequisite_percentage(
-#         sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)), 3
-#     )
-# )
-# print(
-#     select_criteria_sentences(
-#         sentence_scoring(sent_tokenize(input_text), word_freq_table(input_text)), 3
-#     )
-# )
-# tf_idf = tf_idf_combine(
-#     word_freq_table(input_text),
-#     inverse_document_frequency(sent_tokenize(input_text), word_tokenize(input_text)),
-# )
-# print(sentence_scoring(sent_tokenize(input_text), tf_idf))
-
-
-# 1) number of times a word appears in
-# the article, (2) the number of words in the sentence that also appear
-# in the title of the article, or in section headings, (3) position of the
-# sentence in the article and in the section, (4) the number of sen-
-# tence words matching a pre-compiled list of cue words such as “In
-# sum”

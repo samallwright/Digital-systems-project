@@ -7,20 +7,15 @@ def find_cue_words(title: str, query: str, stigma: str, content: str) -> dict:
     """uses cue and query words to influence weighting for summarisation"""
     cue_words = set(word for word in stop_word_removal(title + " " + query))
     stigma_words = set(word.lower() for word in stop_word_removal(stigma))
-    # cue_words = FreqDist(word.lower() for word in cue_words)
-    # print(stigma_words)
     cue_count = dict()
     for sentence in content:
         removed = [word.lower() for word in stop_word_removal(sentence)]
         cue_count[content.index(sentence)] = 0
-        # print(cue_count[content.index(sentence)])
         for cue_word in cue_words:
             if cue_word.lower() in removed:
                 cue_count[content.index(sentence)] += 1
-                # print(cue_count[content.index(sentence)])
             elif cue_word.lower() in stigma_words:
                 cue_count[content.index(sentence)] -= 10
-                # print(cue_count[content.index(sentence)])
     return cue_count
 
 
@@ -38,9 +33,6 @@ def cue_score(cue_frequencies: dict, sentences) -> dict:
 def cue_word_combine(luhn_sentences, cue_score):
     sentences = list(luhn_sentences.keys())
     edmundson = dict()
-    # for sentence, value in luhn_sentences.items():
-    #     edmundson[sentence] = value + cue_score[sentences.index(sentence)]
-    # return edmundson
     edmundson = {
         sentence: value + cue_score[sentences.index(sentence)]
         for (sentence, value) in luhn_sentences.items()

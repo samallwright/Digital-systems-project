@@ -13,13 +13,6 @@ def inverse_document_frequency(sentences, word_tokens) -> dict:
     """idf = log(num_of_sentences/num_of_sentences_with_word)"""
     sentence_count_for_word = dict()
     token_stems = word_stemming(word_tokens)  # key:word, value:root
-    # for sentence in sentences:
-    #     for word in word_tokens:
-    #         if word.lower() in sentence.lower():
-    #             if word in sentence_count_for_word:
-    #                 sentence_count_for_word[word] += 1
-    #             else:
-    #                 sentence_count_for_word[word] = 1
     for sentence in sentences:
         words = word_tokenize(sentence)
         stemmed_sentence = word_stemming(words)
@@ -73,16 +66,6 @@ def position_score(sentences):
 
     return newdict
 
-    # print(bell_height)
-    # print(y_out)
-    # # Plotting the bell-shaped curve
-    # plt.style.use("seaborn")
-    # plt.figure(figsize=(6, 6))
-    # plt.plot(sentence_length_list_positions, bell_height, color="black", linestyle="dashed")
-
-    # plt.scatter(sentence_length_list_positions, bell_height, marker="o", s=25, color="red")
-    # plt.show()
-
 
 def combine_position_tf_idf(weighted_sentences, bell_height):
     luhn = dict()
@@ -98,38 +81,12 @@ def token_dists(input_text: str) -> dict:
     that word was counted, divided by the total word count"""
 
     word_tokens = stop_word_removal(input_text)
-    # token_dist = FreqDist(word.lower() for word in word_tokens)
-    # word_sum = len(word_tokens)
-    # scored_words = {key: value / word_sum for (key, value) in token_dist.items()}
-
-    # amount of times root is mentioned
     token_stems = word_stemming(word_tokens)  # key:word, value:root
     stemmed_freq = FreqDist(word.lower() for word in token_stems.values())
     stem_sum = len(stemmed_freq)
-    # root_scores = dict()
-    # for word, root in token_stems.items():
-    #     root_scores[word] = stemmed_freq[root] / stem_sum
+
     root_scores = {
         word: stemmed_freq[root] / stem_sum for (word, root) in token_stems.items()
     }
 
     return root_scores
-
-
-# input_text = get_text()
-# print(word_freq_table(input_text))
-# print(token_dists(input_text).items())
-# print(top_ten(token_dists(input_text)))
-# print(bottom_10(token_dists(input_text)))
-# print(single_occurrence(token_dists(input_text)))
-# print(bigrams(token_dists(input_text)))
-# print(trigrams(token_dists(input_text)).items())
-# print(inverse_document_frequency(sent_tokenize(input_text), word_tokenize(input_text)))
-# print(
-#     tf_idf(
-#         word_freq_table(input_text),
-#         inverse_document_frequency(
-#             sent_tokenize(input_text), word_tokenize(input_text)
-#         ),
-#     )
-# )

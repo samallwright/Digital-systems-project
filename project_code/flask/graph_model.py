@@ -2,7 +2,7 @@ from nltk import sent_tokenize, word_tokenize
 from text_functions import get_text, stop_word_removal
 
 
-def similarity_graph(sentence_tokens):
+def similarity_graph(sentence_tokens) -> list:
     """Compare similarity between sentences to create ranking
     table between every sentence against every sentence"""
 
@@ -30,7 +30,7 @@ def words_in_common(sentence_one, sentence_two) -> int:
     return counter
 
 
-def graph_density(matrix, sentence_tokens):
+def graph_density(matrix, sentence_tokens) -> list:
     """creates density score of similar words against sentence length"""
 
     density_dicts = []
@@ -60,7 +60,6 @@ def maximum_similarity(density_matrix: list) -> list:
     return most_similar_sentences
 
 
-# could run tests with what number provides good summary
 def weakest_links(sentence_scores):
     """filters highest similarity sentences above baseline"""
     similar_sentences = set()
@@ -68,32 +67,3 @@ def weakest_links(sentence_scores):
         if sentence[1] >= 0.05:
             similar_sentences.add(sentence[0])
     return similar_sentences
-
-
-### you could add up every sentence score to corresponding sentences, which would indicate lots of other sentences having in common
-### or would it be that sentence should be kept and all others removed?
-### could take 50/75% of the most similar sentences, making a dict of sentences and number of sentences in common
-# how to score position?
-def compare_ouputs(output_a, output_b):
-    print(output_a)
-    print("\n\n\n\n\n\n\n\n\n\n")
-    print(output_b)
-
-
-def dot_product(A, B):
-    return sum(a * b for a, b in zip(A, B))
-
-
-def cosign_similarity(a, b):
-    return dot_product(a, b) / ((dot_product(a, a) ** 0.5) * (dot_product(b, b) ** 0.5))
-
-
-# input = get_text()
-# t0 = time.perf_counter()
-# stokens = sent_tokenize(input)
-# matrix = similarity_graph(stokens)
-# t1 = time.perf_counter() - t0
-# print("time elapsed: %fs" % (t1))
-# density = graph_density(matrix, stokens)
-# for sentence in density:
-#     print(sentence.items())

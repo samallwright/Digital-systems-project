@@ -47,8 +47,6 @@ def index():
         if size == 0 and prerequisite == 0:
             flash("Choose EITHER quantity or %")
         else:
-            # summary = stop_word.stop_word_vomit(content)
-            # summary = token_freq.top_ten(content)
             summary, rouge_results, removed, reduction, speed = summarizer(
                 title, content, query, stigma, prerequisite, size
             )
@@ -62,7 +60,6 @@ def index():
             id = cursor.lastrowid
             conn.commit()
             conn.close()
-            # return redirect(url_for("index"))
             post = get_post(id)
             return render_template("post.html", post=post)
     return render_template("main_page.html")
