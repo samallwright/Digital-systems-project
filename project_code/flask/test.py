@@ -31,37 +31,6 @@ from nltk import word_tokenize, sent_tokenize
 # pytest test.py
 
 
-# def run_unit_state_tests():
-#     unit_list = [
-#         test_word_stemming,
-#         test_stop_word_removal,
-#         test_summarizer,
-#         test_token_dists,
-#         test_inverse_document_frequency,
-#         test_tf_idf_combine,
-#         test_position_score,
-#         test_combine_position_tf_idf,
-#         test_find_cue_words,
-#         test_cue_score,
-#         test_cue_word_combine,
-#         test_words_in_common,
-#         test_similarity_graph,
-#         test_graph_density,
-#         test_maximum_similarity,
-#         test_weakest_links,
-#         test_word_removal,
-#         test_sentence_scoring,
-#         test_sentences,
-#         test_get_quartile,
-#         test_prerequisite_percentage,
-#         test_quartile,
-#         test_select_criteria_sentences,
-#     ]
-#     for test in unit_list:
-#         result = test()
-#         print(f"{test.__name__} : {result}")
-
-
 def test_always_pass():
     assert True
 
@@ -244,33 +213,58 @@ def test_cue_score():
 
 
 def test_cue_word_combine():
-    cue_word_combine
-    result = False
-    assert result
+    luhn_sentences = {"sentence": 1}
+    score = {0: 2}
+
+    result = cue_word_combine(luhn_sentences, score)
+    assert type(result) == dict
+    for sentence, value in result.items():
+        assert sentence == "sentence"
+        assert value == 3
+        assert value == luhn_sentences["sentence"] + score[0]
 
 
 def test_words_in_common():
-    words_in_common
-    result = False
-    assert result
+    result = words_in_common("dummy sentence one", "dummy sentence two")
+    assert result == 2
 
 
 def test_similarity_graph():
-    similarity_graph
-    result = False
-    assert result
+    text = [
+        "sentence one for similarity. ",
+        "sentence two is different. ",
+        "sentence three more so but still different. ",
+    ]
+    result = similarity_graph(text)
+    assert type(result) == list
+    assert result[0] == [1, 1]
+    assert result[1] == [1, 2]
+    assert result[2] == [1, 2]
 
 
 def test_graph_density():
-    graph_density
-    result = False
-    assert result
+    sents = [
+        "sentence one for similarity. ",
+        "sentence two is different. ",
+        "sentence three more so but still different. ",
+    ]
+    matrix = [[1, 1], [1, 2], [1, 2]]
+
+    result = graph_density(matrix, sents)
+    assert type(result) == list
+    assert type(result[0]) == dict
+    pos, density = result[0].items()
+    assert density == (1, 0.2)
+    pos, density = result[1].items()
+    assert density == (1, 0.4)
+    pos, density = result[2].items()
+    assert density == (1, 0.4)
 
 
 def test_maximum_similarity():
-    maximum_similarity
-    result = False
-    assert result
+    result = maximum_similarity([{1: 0.2}, {1: 0.4}, {1: 0.4}])
+    max_sentence = max(result.items(), key=lambda k: k[1])
+    assert max_sentence == 0
 
 
 def test_weakest_links():
